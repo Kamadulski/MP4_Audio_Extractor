@@ -1,0 +1,5 @@
+# MP4 Audio Extractor Requirements
+# Python 3.6+ is required
+
+# No external Python packages required beyond standard library
+# FFmpeg must be installed separately and available in the system PATH
