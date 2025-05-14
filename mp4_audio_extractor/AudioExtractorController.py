@@ -7,7 +7,7 @@ This module connects the model and view components and handles the application l
 import os
 from typing import Callable, Dict, Any
 
-from mp4_audio_extractor.utils import AudioProcessingUtils
+from mp4_audio_extractor.AudioProcessingUtils import AudioProcessingUtils
 
 
 class AudioExtractorController:

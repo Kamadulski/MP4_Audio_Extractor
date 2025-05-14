@@ -9,7 +9,7 @@ from tkinter import filedialog, messagebox, ttk
 import threading
 import os
 
-from mp4_audio_extractor.controller import AudioExtractorController
+from mp4_audio_extractor.AudioExtractorController import AudioExtractorController
 
 
 class AudioExtractorGUI(tk.Tk):

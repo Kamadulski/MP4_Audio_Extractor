@@ -8,7 +8,7 @@ import argparse
 import sys
 from typing import Dict, Any
 
-from mp4_audio_extractor.controller import AudioExtractorController
+from mp4_audio_extractor.AudioExtractorController import AudioExtractorController
 
 
 class AudioExtractorCLI:

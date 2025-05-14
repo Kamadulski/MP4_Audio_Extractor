@@ -87,18 +87,46 @@ The command-line version is available for systems without tkinter or for users w
 ## Project Structure
 
 ```
-mp4_audio_extractor/
-├── __init__.py         # Package initialization
-├── __main__.py         # Entry point when run as a module
-├── controller.py       # Application logic
-├── view_gui.py         # GUI interface
-├── view_cli.py         # CLI interface
-├── utils.py            # Utility functions
-mp4_audio_extractor_gui.py  # Thin wrapper for GUI entry point
-mp4_audio_extractor_cli.py  # Thin wrapper for CLI entry point
+root/
+├── docs/                   # Documentation
+│   ├── prd.md              # Product Requirements Document
+│   ├── techstack.md        # Technology Stack Recommendation
+│   ├── backend.md          # Backend Implementation Guide
+│   ├── frontend.md         # Frontend Implementation Guide
+│   ├── flow.md             # System Flow Documentation
+│   ├── status.md           # Project Status Report
+│   └── user_guide.md       # User Guide
+│
+├── mp4_audio_extractor/
+│   ├── __init__.py         # Package initialization
+│   ├── __main__.py         # Entry point when run as a module
+│   ├── AudioExtractorController.py       # GUI/CLI Controller component
+│   ├── AudioProcessingUtils.py           # Audio processing utilities
+│   ├── view_gui.py         # GUI interface
+│   └── view_cli.py         # CLI interface
+│
+├── scripts/                # Utility scripts
+│   └── generate_test_media.py  # Script to generate test media files
+│
+├── tests/                  # Unit tests
+│   ├── test_media/         # Test media files
+│   │   ├── sample_base_2s.mp4                  # Base 2s sample .mp4 file
+│   │   ├── sample_base_2s_corrupted_header.mp4 # Corrupted by modifying header
+│   │   ├── sample_base_2s_corrupted_middle.mp4 # Corrupted by modifying middle
+│   │   └── sample_base_5s.mp4                  # Base 5s sample .mp4 file
+│   │
+│   ├── test_utils/         # Test utilities
+│   │   └── TestMediaGenerator.py
+│   │
+│   └── test_audio_processing_utils.py  # Tests for AudioProcessingUtils
+│    
+├── LICENSE                 # License file     
+├── mp4_audio_extractor_gui.py  # Thin wrapper for GUI entry point
+├── mp4_audio_extractor_cli.py  # Thin wrapper for CLI entry point
+├── README.md               # This file
+├── requirements.txt        # List of dependencies
+└── setup.py                # Setup script for packaging
 ```
-
-The standalone scripts (`mp4_audio_extractor_gui.py` and `mp4_audio_extractor_cli.py`) are thin wrappers around the module functionality, ensuring consistent behavior regardless of how the application is launched.
 
 ## License
 

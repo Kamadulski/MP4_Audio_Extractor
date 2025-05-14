@@ -6,7 +6,7 @@ python -m mp4_audio_extractor
 """
 
 import sys
-from mp4_audio_extractor.controller import AudioExtractorController
+from mp4_audio_extractor.AudioExtractorController import AudioExtractorController
 
 
 def main_cli():
