@@ -42,6 +42,8 @@ class AudioProcessingUtils:
             output_format: Output audio format ('mp3' or 'aac').
             bitrate: Audio bitrate for the output file (e.g., '128k', '192k', '320k').
                     Only applies to MP3 format. Default is '192k'.
+                    For MP3 format, the function will optimize the bitrate by using the lower value
+                    between the source audio's bitrate and the provided bitrate parameter.
 
         Returns:
             Tuple[bool, str]: (success, message) where success is True if processing was successful,
@@ -66,13 +68,53 @@ class AudioProcessingUtils:
             # Create base input stream
             stream = ffmpeg.input(str(input_filepath))
 
+            # For MP3 format, optimize the bitrate based on source audio
+            optimal_bitrate = bitrate
+            if output_format.lower() == 'mp3':
+                try:
+                    # Probe the input file to get audio information
+                    probe_data = ffmpeg.probe(str(input_filepath))
+
+                    # Find the audio stream
+                    audio_stream = next((s for s in probe_data['streams']
+                                        if s.get('codec_type') == 'audio'), None)
+
+                    if audio_stream:
+                        # Check if the audio stream has a bit_rate field
+                        if 'bit_rate' in audio_stream:
+                            # Get source bitrate in kbps (remove 'k' suffix from our bitrate parameter)
+                            source_bitrate_bps = int(audio_stream['bit_rate'])
+                            source_bitrate_kbps = source_bitrate_bps / 1000
+                            target_bitrate_kbps = int(bitrate.rstrip('k'))
+
+                            # Check if source has variable bitrate (VBR)
+                            is_vbr = False
+                            if 'tags' in audio_stream and 'encoder' in audio_stream['tags']:
+                                # Some encoders indicate VBR in their tags
+                                encoder_info = audio_stream['tags']['encoder'].lower()
+                                is_vbr = 'vbr' in encoder_info
+
+                            # Use the optimization logic
+                            if is_vbr:
+                                # For VBR, use the provided bitrate parameter
+                                optimal_bitrate = bitrate
+                            else:
+                                # For CBR, use the lower value between source and target
+                                if source_bitrate_kbps < target_bitrate_kbps:
+                                    optimal_bitrate = f"{int(source_bitrate_kbps)}k"
+                                else:
+                                    optimal_bitrate = bitrate
+                except Exception as probe_error:
+                    # If probing fails, use the provided bitrate parameter
+                    optimal_bitrate = bitrate
+
             # Configure output based on format
             if output_format.lower() == 'mp3':
                 output = ffmpeg.output(
                     stream.audio,
                     str(output_filepath),
                     acodec='libmp3lame',
-                    ab=bitrate,
+                    ab=optimal_bitrate,
                     map_metadata='-1',
                     vn=None  # No video
                 )

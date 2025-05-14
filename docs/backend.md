@@ -19,18 +19,20 @@ This tool is a standalone application with a GUI, not a traditional client-serve
    * **Description:** Checks if FFmpeg is available in the system PATH.
    * **Returns:** `True` if FFmpeg is available, `False` otherwise.
 
-3. **`AudioProcessingUtils.process_file(input_filepath: str, output_format: str) -> Tuple[bool, str]`**
-   * **Description:** Processes a single MP4 file to extract its audio track.
+3. **`AudioProcessingUtils.process_file(input_filepath: str, output_format: str, bitrate: str = '192k') -> Tuple[bool, str]`**
+   * **Description:** Processes a single MP4 file to extract its audio track. For MP3 format, the function optimizes the bitrate by using the lower value between the source audio's bitrate and the provided bitrate parameter.
    * **Parameters:**
      * `input_filepath`: Path to the input MP4 file.
      * `output_format`: Output audio format ('mp3' or 'aac').
+     * `bitrate`: Audio bitrate for the output file (e.g., '128k', '192k', '320k'). Only applies to MP3 format. Default is '192k'.
    * **Returns:** A tuple containing (success, message) where success is True if processing was successful, and message contains status or error information.
 
-4. **`AudioProcessingUtils.process_folder(input_folderpath: str, output_format: str) -> Dict`**
-   * **Description:** Processes all MP4 files in a folder.
+4. **`AudioProcessingUtils.process_folder(input_folderpath: str, output_format: str, bitrate: str = '192k') -> Dict`**
+   * **Description:** Processes all MP4 files in a folder. For MP3 format, the function optimizes the bitrate for each file.
    * **Parameters:**
      * `input_folderpath`: Path to the folder containing MP4 files.
      * `output_format`: Output audio format ('mp3' or 'aac').
+     * `bitrate`: Audio bitrate for the output file (e.g., '128k', '192k', '320k'). Only applies to MP3 format. Default is '192k'.
    * **Returns:** A dictionary containing processing statistics (e.g., `{'total_files': 5, 'successful': 4, 'failed': 1, 'errors': [...]}`).
 
 5. **`AudioProcessingUtils.get_output_filepath(input_filepath: str, output_format: str, output_directory: Optional[str] = None) -> str`**
@@ -115,7 +117,11 @@ The core business logic revolves around identifying the input files, determining
 
 The knowledge that the source audio is expected to be AAC 48000Hz stereo 320kbps informs the choice of output options:
 *   Saving as **AAC** should ideally use `-c:a copy` to simply copy the existing audio stream without re-encoding. This is fast and preserves the original stream's quality.
-*   Saving as **MP3** requires re-encoding. Choosing a bitrate like 320kbps (`-ab 320k`) aims to retain high quality, comparable to the source bitrate, although MP3 is a different lossy format than AAC.
+*   Saving as **MP3** requires re-encoding. The function now optimizes the bitrate by:
+    * Retrieving the actual bitrate from the source MP4 audio track using ffmpeg's probe functionality
+    * If the source has a variable bitrate (VBR), using the bitrate parameter value passed to the function
+    * If the source has a constant bitrate (CBR), using the lower value between the source audio's actual bitrate and the bitrate parameter value passed to the function
+    * This optimization prevents wasteful encoding at higher bitrates than the source, as encoding at a higher bitrate than the original won't improve audio quality but will increase file size.
 
 ## 5. Security
 

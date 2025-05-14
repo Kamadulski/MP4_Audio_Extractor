@@ -142,7 +142,11 @@ python -m mp4_audio_extractor --cli path/to/video.mp4 [-f mp3|aac] [-b 128k|192k
 ## Technical Notes
 
 - When extracting to AAC format, the application attempts to copy the audio stream without re-encoding (assuming the source audio is AAC)
-- When extracting to MP3 format, the application uses the libmp3lame codec with the selected bitrate (default: 192kbps)
+- When extracting to MP3 format, the application uses the libmp3lame codec with an optimized bitrate:
+  - The application analyzes the source audio's bitrate
+  - For variable bitrate (VBR) sources, it uses the selected bitrate (default: 192kbps)
+  - For constant bitrate (CBR) sources, it uses the lower value between the source audio's actual bitrate and the selected bitrate
+  - This prevents wasteful encoding at higher bitrates than the source, as encoding at a higher bitrate than the original won't improve audio quality but will increase file size
 - The application allows selecting from standard bitrates (128k, 192k, 320k) or specifying a custom bitrate
 - The application removes metadata from the output files
 - The application uses the ffmpeg-python library to interact with FFmpeg, which provides a more reliable and maintainable interface than direct subprocess calls
