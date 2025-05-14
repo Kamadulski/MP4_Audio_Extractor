@@ -90,10 +90,9 @@ The command-line version is available for systems without tkinter or for users w
 mp4_audio_extractor/
 ├── __init__.py         # Package initialization
 ├── __main__.py         # Entry point when run as a module
-├── model.py            # Core audio extraction logic
+├── controller.py       # Application logic
 ├── view_gui.py         # GUI interface
 ├── view_cli.py         # CLI interface
-├── controller.py       # Application logic
 ├── utils.py            # Utility functions
 mp4_audio_extractor_gui.py  # Thin wrapper for GUI entry point
 mp4_audio_extractor_cli.py  # Thin wrapper for CLI entry point

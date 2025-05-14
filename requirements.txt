@@ -1,5 +1,18 @@
 # MP4 Audio Extractor Requirements
 # Python 3.6+ is required
 
-# No external Python packages required beyond standard library
-# FFmpeg must be installed separately and available in the system PATH
+# Core dependencies
+setuptools>=42.0.0
+wheel>=0.37.0
+
+# Audio processing
+ffmpeg-python>=0.2.0  # Python wrapper for FFmpeg
+
+# GUI dependencies 
+# (tkinter is part of standard library but specified for clarity)
+# No pip installation required for tkinter, install through your system's package manager if missing
+
+# Testing and development (optional)
+pytest>=7.0.0  # If you plan to add unit tests
+flake8>=4.0.0  # For code linting
+black>=22.0.0  # For code formatting
