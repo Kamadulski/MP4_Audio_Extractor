@@ -85,9 +85,16 @@ class AudioExtractorController:
                     update_status(f"Error: {message}")
 
             elif os.path.isdir(selected_path):
-                # Process a folder
+                # Process a folder with progress updates
                 update_status(f"Scanning folder: {selected_path} for MP4 files...")
-                results = AudioProcessingUtils.process_folder(selected_path, output_format, bitrate)
+
+                # Define a progress callback to provide intermediate updates
+                def progress_callback(current_file, index, total):
+                    update_status(f"Processing ({index}/{total}): {os.path.basename(current_file)}")
+
+                results = AudioProcessingUtils.process_folder(
+                    selected_path, output_format, bitrate, progress_callback=progress_callback
+                )
 
                 if results['total_files'] == 0:
                     update_status(f"No MP4 files found in {selected_path}")
@@ -106,3 +113,4 @@ class AudioExtractorController:
         finally:
             # Re-enable the convert button
             set_processing_state(False)
+

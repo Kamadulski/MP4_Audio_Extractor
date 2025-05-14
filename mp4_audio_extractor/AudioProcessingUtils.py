@@ -137,7 +137,8 @@ class AudioProcessingUtils:
             return False, f"Error processing {input_path.name}: {e.stderr.decode() if e.stderr else str(e)}"
 
     @staticmethod
-    def process_folder(input_folderpath: str, output_format: str, bitrate: str = '192k') -> Dict:
+    def process_folder(input_folderpath: str, output_format: str, bitrate: str = '192k',
+                      progress_callback=None) -> Dict:
         """
         Process all MP4 files in a folder.
 
@@ -146,6 +147,8 @@ class AudioProcessingUtils:
             output_format: Output audio format ('mp3' or 'aac').
             bitrate: Audio bitrate for the output file (e.g., '128k', '192k', '320k').
                     Only applies to MP3 format. Default is '192k'.
+            progress_callback: Optional callback function to report progress.
+                          Called with (current_file, current_index, total_files).
 
         Returns:
             Dict: A dictionary containing processing statistics.
@@ -177,6 +180,10 @@ class AudioProcessingUtils:
 
         # Process each file
         for i, mp4_file in enumerate(mp4_files):
+            # Call progress callback if provided
+            if progress_callback:
+                progress_callback(str(mp4_file), i + 1, len(mp4_files))
+                
             success, message = AudioProcessingUtils.process_file(str(mp4_file), output_format, bitrate)
 
             if success:
@@ -212,3 +219,4 @@ class AudioProcessingUtils:
         output_filepath = output_dir / output_name
 
         return str(output_filepath)
+
