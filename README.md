@@ -1,6 +1,6 @@
 # MP4 Audio Extractor
 
-A simple application to extract audio tracks from MP4 video files. Available in both GUI and command-line versions.
+A simple application to extract audio tracks from MP4 video files. Available in both GUI and command-line versions. Built using the Model-View-Controller (MVC) architecture for better modularity and maintainability.
 
 ## Features
 
@@ -21,6 +21,14 @@ A simple application to extract audio tracks from MP4 video files. Available in 
 3. Add FFmpeg to your system PATH
 4. Clone or download this repository
 
+## Architecture
+
+The application is built using the Model-View-Controller (MVC) architecture:
+
+- **Model**: Handles the core audio extraction logic and FFmpeg interaction
+- **View**: Provides the user interface (both GUI and CLI versions)
+- **Controller**: Connects the model and views, handling the application logic
+
 ## Usage
 
 ### GUI Version
@@ -29,7 +37,12 @@ A simple application to extract audio tracks from MP4 video files. Available in 
 
 1. Run the GUI application:
    ```
-   python mp4_audio_extractor.py
+   python mp4_audio_extractor_gui.py
+   ```
+
+   Or use the module directly:
+   ```
+   python -m mp4_audio_extractor
    ```
 
 2. Use the "Select File" button to choose a single MP4 file, or "Select Folder" to select a directory containing MP4 files.
@@ -49,6 +62,11 @@ The command-line version is available for systems without tkinter or for users w
    python mp4_audio_extractor_cli.py path/to/video.mp4 [--format mp3|aac]
    ```
 
+   Or use the module directly:
+   ```
+   python -m mp4_audio_extractor --cli path/to/video.mp4 [--format mp3|aac]
+   ```
+
 2. Process all MP4 files in a folder:
    ```
    python mp4_audio_extractor_cli.py path/to/folder [--format mp3|aac]
@@ -64,6 +82,21 @@ The command-line version is available for systems without tkinter or for users w
 - The application requires FFmpeg to be installed and available in the system PATH.
 - When extracting to AAC format, the application attempts to copy the audio stream without re-encoding (assuming the source audio is AAC).
 - When extracting to MP3 format, the application uses the libmp3lame codec with a bitrate of 320kbps.
+- The application will automatically fall back to CLI mode if tkinter is not available.
+
+## Project Structure
+
+```
+mp4_audio_extractor/
+├── __init__.py         # Package initialization
+├── __main__.py         # Entry point when run as a module
+├── model.py            # Core audio extraction logic
+├── view_gui.py         # GUI interface
+├── view_cli.py         # CLI interface
+├── controller.py       # Application logic
+mp4_audio_extractor_gui.py  # GUI entry point
+mp4_audio_extractor_cli.py  # CLI entry point
+```
 
 ## License
 
