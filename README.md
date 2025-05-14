@@ -94,9 +94,12 @@ mp4_audio_extractor/
 ├── view_gui.py         # GUI interface
 ├── view_cli.py         # CLI interface
 ├── controller.py       # Application logic
-mp4_audio_extractor_gui.py  # GUI entry point
-mp4_audio_extractor_cli.py  # CLI entry point
+├── utils.py            # Utility functions
+mp4_audio_extractor_gui.py  # Thin wrapper for GUI entry point
+mp4_audio_extractor_cli.py  # Thin wrapper for CLI entry point
 ```
+
+The standalone scripts (`mp4_audio_extractor_gui.py` and `mp4_audio_extractor_cli.py`) are thin wrappers around the module functionality, ensuring consistent behavior regardless of how the application is launched.
 
 ## License
 

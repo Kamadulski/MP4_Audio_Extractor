@@ -6,25 +6,7 @@ A simple command-line application to extract audio from MP4 video files.
 """
 
 import sys
-from mp4_audio_extractor.controller import AudioExtractorController
-from mp4_audio_extractor.view_cli import AudioExtractorCLI
-
-
-def main():
-    """Main entry point for the CLI application."""
-    # Create the controller
-    controller = AudioExtractorController()
-    view = AudioExtractorCLI()
-
-    # Connect the view and controller
-    view.set_controller_callbacks(
-        controller.process_file,
-        controller.process_folder,
-        controller.check_ffmpeg
-    )
-
-    # Run the application
-    return view.run()
+from mp4_audio_extractor.__main__ import main_cli
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main_cli())
