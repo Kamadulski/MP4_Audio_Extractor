@@ -81,7 +81,7 @@ The command-line version is available for systems without tkinter or for users w
 
 - The application requires FFmpeg to be installed and available in the system PATH.
 - When extracting to AAC format, the application attempts to copy the audio stream without re-encoding (assuming the source audio is AAC).
-- When extracting to MP3 format, the application uses the libmp3lame codec with a bitrate of 320kbps.
+- When extracting to MP3 format, the application uses the libmp3lame codec with a bitrate of 192kbps.
 - The application will automatically fall back to CLI mode if tkinter is not available.
 
 ## Project Structure

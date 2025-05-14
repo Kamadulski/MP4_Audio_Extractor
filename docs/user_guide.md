@@ -59,16 +59,18 @@ Before using the MP4 Audio Extractor, you need to have the following installed:
 1. Click the "Select File" button
 2. Browse to and select the MP4 file you want to process
 3. Choose the desired output format (MP3 or AAC)
-4. Click the "Convert Audio" button
-5. The application will process the file and save the extracted audio in the same directory as the input file
+4. Select the audio bitrate using either the dropdown menu or by entering a custom value
+5. Click the "Convert Audio" button
+6. The application will process the file and save the extracted audio in the same directory as the input file
 
 #### Batch Processing Multiple Files (GUI)
 
 1. Click the "Select Folder" button
 2. Browse to and select the folder containing MP4 files
 3. Choose the desired output format (MP3 or AAC)
-4. Click the "Convert Audio" button
-5. The application will process all MP4 files in the selected folder and save the extracted audio files in the same directory as each input file
+4. Select the audio bitrate using either the dropdown menu or by entering a custom value
+5. Click the "Convert Audio" button
+6. The application will process all MP4 files in the selected folder and save the extracted audio files in the same directory as each input file
 
 ### Command-Line Version
 
@@ -78,12 +80,12 @@ Before using the MP4 Audio Extractor, you need to have the following installed:
 
 2. Process a single file:
    ```
-   python mp4_audio_extractor_cli.py path/to/video.mp4 [-f mp3|aac]
+   python mp4_audio_extractor_cli.py path/to/video.mp4 [-f mp3|aac] [-b 128k|192k|320k] [--custom-bitrate BITRATE]
    ```
 
 3. Process all MP4 files in a folder:
    ```
-   python mp4_audio_extractor_cli.py path/to/folder [-f mp3|aac]
+   python mp4_audio_extractor_cli.py path/to/folder [-f mp3|aac] [-b 128k|192k|320k] [--custom-bitrate BITRATE]
    ```
 
 4. Get help:
@@ -99,13 +101,19 @@ python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4
 # Extract audio from a single file and save as AAC
 python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4 -f aac
 
+# Extract audio with a specific bitrate
+python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4 -b 192k
+
+# Extract audio with a custom bitrate
+python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4 --custom-bitrate 256k
+
 # Process all MP4 files in a folder and save as MP3
 python mp4_audio_extractor_cli.py C:\Videos
 ```
 
 You can also use the module directly:
 ```
-python -m mp4_audio_extractor --cli path/to/video.mp4 [-f mp3|aac]
+python -m mp4_audio_extractor --cli path/to/video.mp4 [-f mp3|aac] [-b 128k|192k|320k] [--custom-bitrate BITRATE]
 ```
 
 ### Understanding the Output
@@ -134,7 +142,8 @@ python -m mp4_audio_extractor --cli path/to/video.mp4 [-f mp3|aac]
 ## Technical Notes
 
 - When extracting to AAC format, the application attempts to copy the audio stream without re-encoding (assuming the source audio is AAC)
-- When extracting to MP3 format, the application uses the libmp3lame codec with a bitrate of 320kbps
+- When extracting to MP3 format, the application uses the libmp3lame codec with the selected bitrate (default: 192kbps)
+- The application allows selecting from standard bitrates (128k, 192k, 320k) or specifying a custom bitrate
 - The application removes metadata from the output files
 - The application uses the ffmpeg-python library to interact with FFmpeg, which provides a more reliable and maintainable interface than direct subprocess calls
 - By default, output files are saved in the same directory as the input files, with the same filename but a different extension

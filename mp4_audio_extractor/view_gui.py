@@ -25,8 +25,8 @@ class AudioExtractorGUI(tk.Tk):
 
         # Set up the main window
         self.title("MP4 Audio Extractor")
-        self.geometry("525x325")
-        self.resizable(False, False)
+        self.geometry("625x500")
+        self.resizable(True, True)
 
         # Store the controller
         self.controller = controller
@@ -37,6 +37,8 @@ class AudioExtractorGUI(tk.Tk):
         self.status_message.set("Select a file or folder to get started.")
         self.is_processing = False
         self.output_format = tk.StringVar(value="mp3")  # Default output format
+        self.bitrate = tk.StringVar(value="192k")  # Default bitrate
+        self.custom_bitrate = tk.StringVar()  # Custom bitrate input
 
         # Create the GUI components
         self.create_widgets()
@@ -73,6 +75,29 @@ class AudioExtractorGUI(tk.Tk):
 
         aac_radio = ttk.Radiobutton(format_frame, text="AAC", variable=self.output_format, value="aac")
         aac_radio.pack(side=tk.LEFT, padx=20, pady=5)
+
+        # Bitrate selection
+        bitrate_frame = ttk.LabelFrame(main_frame, text="MP3 Bitrate", padding="5")
+        bitrate_frame.pack(fill=tk.X, pady=5)
+
+        # Standard bitrate options
+        bitrate_label = ttk.Label(bitrate_frame, text="Select bitrate:")
+        bitrate_label.pack(side=tk.LEFT, padx=5, pady=5)
+
+        bitrate_combo = ttk.Combobox(bitrate_frame, textvariable=self.bitrate, width=10,
+                                    values=["128k", "192k", "320k"], state="readonly")
+        bitrate_combo.pack(side=tk.LEFT, padx=5, pady=5)
+
+        # Custom bitrate input
+        custom_bitrate_label = ttk.Label(bitrate_frame, text="Or custom bitrate (kbps):")
+        custom_bitrate_label.pack(side=tk.LEFT, padx=5, pady=5)
+
+        custom_bitrate_entry = ttk.Entry(bitrate_frame, textvariable=self.custom_bitrate, width=8)
+        custom_bitrate_entry.pack(side=tk.LEFT, padx=5, pady=5)
+
+        # Add a note about bitrate only applying to MP3
+        bitrate_note = ttk.Label(bitrate_frame, text="(Only applies to MP3 format)", font=("TkDefaultFont", 8))
+        bitrate_note.pack(side=tk.LEFT, padx=5, pady=5)
 
         # Convert button
         self.convert_btn = ttk.Button(main_frame, text="Convert Audio", command=self.on_convert_clicked)
@@ -145,14 +170,31 @@ class AudioExtractorGUI(tk.Tk):
         # Disable the convert button during processing
         self.set_processing_state(True)
 
-        # Get the selected path and output format
+        # Get the selected path, output format, and bitrate
         selected_path = self.selected_path.get()
         output_format = self.output_format.get()
+
+        # Determine which bitrate to use (custom or selected)
+        bitrate = self.bitrate.get()
+        if self.custom_bitrate.get().strip():
+            # If custom bitrate is provided, use it with 'k' suffix
+            try:
+                # Validate that it's a number
+                custom_value = int(self.custom_bitrate.get().strip())
+                if custom_value <= 0:
+                    messagebox.showerror("Error", "Bitrate must be a positive number.")
+                    self.set_processing_state(False)
+                    return
+                bitrate = f"{custom_value}k"
+            except ValueError:
+                messagebox.showerror("Error", "Custom bitrate must be a valid number.")
+                self.set_processing_state(False)
+                return
 
         # Start processing in a separate thread to keep the GUI responsive
         threading.Thread(
             target=self.controller.handle_gui_convert,
-            args=(selected_path, output_format, self.update_status_safe, self.set_processing_state),
+            args=(selected_path, output_format, bitrate, self.update_status_safe, self.set_processing_state),
             daemon=True
         ).start()
 

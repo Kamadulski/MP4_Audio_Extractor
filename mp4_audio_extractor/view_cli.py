@@ -26,6 +26,13 @@ class AudioExtractorCLI:
         self.parser.add_argument('-f', '--format', choices=['mp3', 'aac'], default='mp3',
                                 help='Output audio format (default: mp3)')
 
+        # Add bitrate options
+        bitrate_group = self.parser.add_mutually_exclusive_group()
+        bitrate_group.add_argument('-b', '--bitrate', choices=['128k', '192k', '320k'], default='192k',
+                                  help='Audio bitrate for MP3 output (default: 192k)')
+        bitrate_group.add_argument('--custom-bitrate', metavar='BITRATE',
+                                  help='Custom audio bitrate for MP3 output (e.g., 256k)')
+
     def parse_args(self) -> argparse.Namespace:
         """
         Parse command-line arguments.
@@ -54,6 +61,33 @@ class AudioExtractorCLI:
             message: The error message to display.
         """
         print(f"Error: {message}", file=sys.stderr)
+
+    def get_bitrate_from_args(self, args):
+        """
+        Determine the bitrate to use based on command-line arguments.
+
+        Args:
+            args: Parsed command-line arguments.
+
+        Returns:
+            str: The bitrate to use (e.g., '128k', '192k', '320k', or a custom value).
+        """
+        if args.custom_bitrate:
+            # If custom bitrate is provided, ensure it has the 'k' suffix
+            custom_bitrate = args.custom_bitrate
+            if not custom_bitrate.endswith('k'):
+                try:
+                    # Try to convert to int to validate it's a number
+                    int(custom_bitrate)
+                    custom_bitrate = f"{custom_bitrate}k"
+                except ValueError:
+                    # If not a valid number, use the default
+                    self.display_error(f"Invalid custom bitrate: {custom_bitrate}. Using default 192k.")
+                    return '192k'
+            return custom_bitrate
+        else:
+            # Use the standard bitrate option
+            return args.bitrate
 
     def display_folder_results(self, results: Dict[str, Any]):
         """
@@ -93,7 +127,11 @@ class AudioExtractorCLI:
         if input_path.is_file():
             # Process a single file
             self.display_message(f"Processing file: {input_path.name}")
-            success, message = self.controller.process_file(str(input_path), args.format)
+
+            # Determine which bitrate to use
+            bitrate = self.get_bitrate_from_args(args)
+
+            success, message = self.controller.process_file(str(input_path), args.format, bitrate)
 
             if success:
                 self.display_message(message)
@@ -105,7 +143,11 @@ class AudioExtractorCLI:
         elif input_path.is_dir():
             # Process a folder
             self.display_message(f"Processing folder: {input_path}")
-            results = self.controller.process_folder(str(input_path), args.format)
+
+            # Determine which bitrate to use
+            bitrate = self.get_bitrate_from_args(args)
+
+            results = self.controller.process_folder(str(input_path), args.format, bitrate)
             self.display_folder_results(results)
 
             if results['failed'] == 0:

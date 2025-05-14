@@ -33,13 +33,15 @@ class AudioProcessingUtils:
             return False
 
     @staticmethod
-    def process_file(input_filepath: str, output_format: str) -> Tuple[bool, str]:
+    def process_file(input_filepath: str, output_format: str, bitrate: str = '192k') -> Tuple[bool, str]:
         """
         Process a single MP4 file to extract its audio.
 
         Args:
             input_filepath: Path to the input MP4 file.
             output_format: Output audio format ('mp3' or 'aac').
+            bitrate: Audio bitrate for the output file (e.g., '128k', '192k', '320k').
+                    Only applies to MP3 format. Default is '192k'.
 
         Returns:
             Tuple[bool, str]: (success, message) where success is True if processing was successful,
@@ -70,7 +72,7 @@ class AudioProcessingUtils:
                     stream.audio,
                     str(output_filepath),
                     acodec='libmp3lame',
-                    ab='320k',
+                    ab=bitrate,
                     map_metadata='-1',
                     vn=None  # No video
                 )
@@ -93,13 +95,15 @@ class AudioProcessingUtils:
             return False, f"Error processing {input_path.name}: {e.stderr.decode() if e.stderr else str(e)}"
 
     @staticmethod
-    def process_folder(input_folderpath: str, output_format: str) -> Dict:
+    def process_folder(input_folderpath: str, output_format: str, bitrate: str = '192k') -> Dict:
         """
         Process all MP4 files in a folder.
 
         Args:
             input_folderpath: Path to the folder containing MP4 files.
             output_format: Output audio format ('mp3' or 'aac').
+            bitrate: Audio bitrate for the output file (e.g., '128k', '192k', '320k').
+                    Only applies to MP3 format. Default is '192k'.
 
         Returns:
             Dict: A dictionary containing processing statistics.
@@ -131,7 +135,7 @@ class AudioProcessingUtils:
 
         # Process each file
         for i, mp4_file in enumerate(mp4_files):
-            success, message = AudioProcessingUtils.process_file(str(mp4_file), output_format)
+            success, message = AudioProcessingUtils.process_file(str(mp4_file), output_format, bitrate)
 
             if success:
                 results['successful'] += 1
