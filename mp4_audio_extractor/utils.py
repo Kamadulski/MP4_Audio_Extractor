@@ -1,7 +1,7 @@
 """
-Model component for the MP4 Audio Extractor.
+Audio processing utilities for the MP4 Audio Extractor.
 
-This module contains the core business logic for extracting audio from MP4 files.
+This module contains utility functions for extracting audio from MP4 files.
 """
 
 import subprocess
@@ -9,35 +9,30 @@ import pathlib
 from typing import Dict, Tuple, Optional
 
 
-class AudioExtractorModel:
-    """Model class for handling audio extraction from MP4 files."""
-    
-    def __init__(self):
-        """Initialize the model."""
-        self._ffmpeg_available = None
-    
-    def check_ffmpeg(self) -> bool:
+class AudioProcessingUtils:
+    """Utility class for handling audio extraction from MP4 files."""
+
+    @staticmethod
+    def check_ffmpeg() -> bool:
         """
         Check if FFmpeg is available in the system PATH.
         
         Returns:
             bool: True if FFmpeg is available, False otherwise.
         """
-        if self._ffmpeg_available is None:
-            try:
-                subprocess.run(
-                    ["ffmpeg", "-version"], 
-                    stdout=subprocess.PIPE, 
-                    stderr=subprocess.PIPE,
-                    check=True
-                )
-                self._ffmpeg_available = True
-            except (subprocess.SubprocessError, FileNotFoundError):
-                self._ffmpeg_available = False
-        
-        return self._ffmpeg_available
-    
-    def process_file(self, input_filepath: str, output_format: str) -> Tuple[bool, str]:
+        try:
+            subprocess.run(
+                ["ffmpeg", "-version"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True
+            )
+            return True
+        except (subprocess.SubprocessError, FileNotFoundError):
+            return False
+
+    @staticmethod
+    def process_file(input_filepath: str, output_format: str) -> Tuple[bool, str]:
         """
         Process a single MP4 file to extract its audio.
         
@@ -101,8 +96,9 @@ class AudioExtractorModel:
         
         except subprocess.CalledProcessError as e:
             return False, f"Error processing {input_path.name}: {e.stderr}"
-    
-    def process_folder(self, input_folderpath: str, output_format: str) -> Dict:
+
+    @staticmethod
+    def process_folder(input_folderpath: str, output_format: str) -> Dict:
         """
         Process all MP4 files in a folder.
         
@@ -140,7 +136,7 @@ class AudioExtractorModel:
         
         # Process each file
         for i, mp4_file in enumerate(mp4_files):
-            success, message = self.process_file(str(mp4_file), output_format)
+            success, message = AudioProcessingUtils.process_file(str(mp4_file), output_format)
             
             if success:
                 results['successful'] += 1
@@ -149,8 +145,9 @@ class AudioExtractorModel:
                 results['errors'].append(message)
         
         return results
-    
-    def get_output_filepath(self, input_filepath: str, output_format: str, output_directory: Optional[str] = None) -> str:
+
+    @staticmethod
+    def get_output_filepath(input_filepath: str, output_format: str, output_directory: Optional[str] = None) -> str:
         """
         Generate the output file path based on the input file path and output format.
         

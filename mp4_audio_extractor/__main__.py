@@ -6,15 +6,13 @@ python -m mp4_audio_extractor
 """
 
 import sys
-from mp4_audio_extractor.model import AudioExtractorModel
 from mp4_audio_extractor.controller import AudioExtractorController
 
 
 def main_cli():
     """Entry point for the CLI application."""
-    # Create the model and controller
-    model = AudioExtractorModel()
-    controller = AudioExtractorController(model)
+    # Create the controller
+    controller = AudioExtractorController()
 
     # Use the CLI view
     from mp4_audio_extractor.view_cli import AudioExtractorCLI
@@ -32,9 +30,8 @@ def main_cli():
 
 def main():
     """Main entry point for the application."""
-    # Create the model and controller
-    model = AudioExtractorModel()
-    controller = AudioExtractorController(model)
+    # Create the controller
+    controller = AudioExtractorController()
 
     # Determine which view to use based on command-line arguments
     if len(sys.argv) > 1 and sys.argv[1] == '--cli':
