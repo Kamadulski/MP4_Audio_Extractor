@@ -1,4 +1,3 @@
-```markdown
 # Audio Extraction Tool System Flow Documentation
 
 **Document Title:** MP4 Audio Extraction Tool
@@ -188,4 +187,4 @@ In summary, security for this tool is primarily about:
 There are no user authentication steps, role-based access controls, or data encryption requirements within the scope of this local file processing utility.
 
 ---
-```
+

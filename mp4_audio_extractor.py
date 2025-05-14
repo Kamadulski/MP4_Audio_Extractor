@@ -12,8 +12,6 @@ import subprocess
 import threading
 import os
 import pathlib
-import sys
-import time
 
 class MP4AudioExtractor(tk.Tk):
     """Main application class for the MP4 Audio Extractor tool."""
@@ -24,7 +22,7 @@ class MP4AudioExtractor(tk.Tk):
 
         # Set up the main window
         self.title("MP4 Audio Extractor")
-        self.geometry("500x250")
+        self.geometry("550x325")
         self.resizable(False, False)
         
         # Application state variables

@@ -1,6 +1,5 @@
 Okay, here is a practical implementation guide for building the MP4 to MP3/AAC audio extraction tool using Python and `tkinter` for the GUI, and `FFmpeg` for the conversion logic.
 
-```markdown
 # MP4 Audio Extractor Tool - Implementation Guide
 
 **Version:** 1.0

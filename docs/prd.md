@@ -1,6 +1,5 @@
 Okay, here is a detailed PRD for the MP4 Audio Extractor tool, formatted in Markdown as requested.
 
-```markdown
 # Document Header
 
 **Product Name:** MP4 Audio Extractor
@@ -180,4 +179,4 @@ Further iterations (Version 1.1, etc.) could include features like:
 *   Recursively processing subfolders.
 *   More detailed progress indicators.
 *   Option to handle multiple audio tracks.
-```
+

@@ -1,4 +1,3 @@
-```markdown
 # Backend Implementation Guide: MP4 Audio Extractor Tool
 
 ## 1. Document Header

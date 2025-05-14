@@ -1,4 +1,3 @@
-```markdown
 # Technology Stack Recommendation: MP4 Audio Extractor
 
 **Version:** 1.0
