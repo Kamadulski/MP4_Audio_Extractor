@@ -30,7 +30,12 @@ Before using the MP4 Audio Extractor, you need to have the following installed:
 ### Installing the Application
 
 1. Download or clone the MP4 Audio Extractor repository
-2. No additional Python packages are required beyond the standard library
+2. Install the required Python packages:
+   ```
+   pip install -r requirements.txt
+   ```
+
+   This will install the ffmpeg-python package, which is used to interact with FFmpeg.
 
 ## Using the Application
 
@@ -41,7 +46,12 @@ Before using the MP4 Audio Extractor, you need to have the following installed:
 1. Navigate to the application directory
 2. Run the application by executing:
    ```
-   python mp4_audio_extractor.py
+   python mp4_audio_extractor_gui.py
+   ```
+
+   Or use the module directly:
+   ```
+   python -m mp4_audio_extractor
    ```
 
 #### Extracting Audio from a Single File (GUI)
@@ -68,12 +78,12 @@ Before using the MP4 Audio Extractor, you need to have the following installed:
 
 2. Process a single file:
    ```
-   python mp4_audio_extractor_cli.py path/to/video.mp4 [--format mp3|aac]
+   python mp4_audio_extractor_cli.py path/to/video.mp4 [-f mp3|aac]
    ```
 
 3. Process all MP4 files in a folder:
    ```
-   python mp4_audio_extractor_cli.py path/to/folder [--format mp3|aac]
+   python mp4_audio_extractor_cli.py path/to/folder [-f mp3|aac]
    ```
 
 4. Get help:
@@ -87,10 +97,15 @@ Examples:
 python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4
 
 # Extract audio from a single file and save as AAC
-python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4 --format aac
+python mp4_audio_extractor_cli.py C:\Videos\myvideo.mp4 -f aac
 
 # Process all MP4 files in a folder and save as MP3
 python mp4_audio_extractor_cli.py C:\Videos
+```
+
+You can also use the module directly:
+```
+python -m mp4_audio_extractor --cli path/to/video.mp4 [-f mp3|aac]
 ```
 
 ### Understanding the Output
@@ -121,3 +136,5 @@ python mp4_audio_extractor_cli.py C:\Videos
 - When extracting to AAC format, the application attempts to copy the audio stream without re-encoding (assuming the source audio is AAC)
 - When extracting to MP3 format, the application uses the libmp3lame codec with a bitrate of 320kbps
 - The application removes metadata from the output files
+- The application uses the ffmpeg-python library to interact with FFmpeg, which provides a more reliable and maintainable interface than direct subprocess calls
+- By default, output files are saved in the same directory as the input files, with the same filename but a different extension

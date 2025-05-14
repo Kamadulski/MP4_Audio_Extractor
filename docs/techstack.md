@@ -7,7 +7,7 @@
 
 This document recommends a technology stack for building a simple desktop GUI tool in Python for Windows 11 to extract audio tracks from MP4 files and save them as MP3, AAC, or potentially M4A files.
 
-The core architecture is a standalone desktop application. A Python script will provide the graphical user interface and handle file/folder selection. The heavy lifting of audio extraction and conversion will be delegated to the industry-standard command-line tool `ffmpeg`, which the Python script will call using the `subprocess` module. There is no need for a separate backend server, database, or complex external services.
+The core architecture is a standalone desktop application. A Python script will provide the graphical user interface and handle file/folder selection. The heavy lifting of audio extraction and conversion will be delegated to the industry-standard command-line tool `ffmpeg`, which the Python script will call using the `ffmpeg-python` library. There is no need for a separate backend server, database, or complex external services.
 
 ## 3. Frontend Recommendations
 
@@ -34,7 +34,7 @@ The core architecture is a standalone desktop application. A Python script will 
 *   **API Design:** **Not Applicable**
     *   **Justification:** This is a monolithic desktop application. There is no need for internal or external APIs in the traditional sense. The interaction is between the GUI elements and the core processing logic within the same Python script.
 
-*   **Core Logic:** The Python script will use modules like `os` or `pathlib` for path manipulation and file system interactions. The `subprocess` module will be used to execute `ffmpeg` commands, capture their output (for error handling/progress), and wait for their completion.
+*   **Core Logic:** The Python script uses modules like `os` or `pathlib` for path manipulation and file system interactions. The `ffmpeg-python` library is used to execute `ffmpeg` commands, which provides a more reliable and maintainable interface than direct subprocess calls.
 
 ## 5. Database Selection
 

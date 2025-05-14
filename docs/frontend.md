@@ -18,20 +18,23 @@ This guide outlines the steps and components required to build a simple GUI appl
 
 The application will follow a basic Model-View-Controller (MVC)-like structure, albeit simplified for a small `tkinter` application.
 
-*   **GUI (`tkinter`):** This acts as the **View** and partially the **Controller**. It handles all user interaction (button clicks, file/folder selection), displays input paths, and shows status messages. It will initiate the conversion process.
-*   **Conversion Logic (Python + `subprocess` + `FFmpeg`):** This is the core **Model** logic. It receives file paths, constructs `FFmpeg` commands, executes `FFmpeg` via Python's `subprocess` module, and handles the conversion process. This component should ideally run in a separate thread to prevent the GUI from freezing during conversion.
+*   **GUI (`tkinter`):** This acts as the **View** component in the MVC architecture. It handles all user interaction (button clicks, file/folder selection), displays input paths, and shows status messages.
+*   **Controller (`AudioExtractorController`):** This acts as the **Controller** component in the MVC architecture. It connects the view and model components and handles the application logic.
+*   **Conversion Logic (`AudioProcessingUtils` + `ffmpeg-python` + `FFmpeg`):** This is the core **Model** logic. It receives file paths, constructs `FFmpeg` commands, executes `FFmpeg` via the `ffmpeg-python` library, and handles the conversion process. This component runs in a separate thread to prevent the GUI from freezing during conversion.
 *   **File System Interaction (`os`, `pathlib`):** Handled within the Conversion Logic or helper functions. Manages listing files in a directory, constructing output paths, checking file existence, etc.
 
 ```mermaid
 graph LR
-    A[User Interaction] --> B(GUI - tkinter)
+    A[User Interaction] --> B(View - tkinter)
     B --> C{Select File/Folder}
     C --> D[Selected Path]
     D --> B
-    B -- "Initiate Conversion" --> E(Conversion Logic)
-    E -- "Execute FFmpeg" --> F[subprocess]
-    F -- "Process Files" --> G[(File System)]
-    G -- "Read/Write Files" --> H[MP4 & Output Files]
+    B -- "Initiate Conversion" --> E(Controller)
+    E -- "Process Files" --> F(AudioProcessingUtils)
+    F -- "Execute FFmpeg" --> G[ffmpeg-python]
+    G -- "Process Files" --> H[(File System)]
+    H -- "Read/Write Files" --> I[MP4 & Output Files]
+    F -- "Return Results" --> E
     E -- "Update Status" --> B
 ```
 
@@ -39,11 +42,10 @@ graph LR
 
 The application state will be relatively simple, managed primarily within the GUI class and the background conversion process.
 
-*   `selected_path`: A string storing the currently selected file or folder path. Initial state: empty or `None`.
+*   `selected_path`: A string storing the currently selected file or folder path. Initial state: empty.
 *   `is_processing`: A boolean flag indicating if a conversion task is currently running. Used to disable buttons or show status. Initial state: `False`.
-*   `status_message`: A string displayed in the GUI to provide feedback to the user (e.g., "Select a file or folder", "Processing...", "Completed!", "Error: ..."). Initial state: an introductory message.
-*   `files_to_process`: A list of `.mp4` file paths when a folder is selected. Initial state: empty list.
-*   `current_file_index`: An integer tracking which file is currently being processed in a folder batch. Initial state: 0.
+*   `status_message`: A string displayed in the GUI to provide feedback to the user (e.g., "Select a file or folder", "Processing...", "Completed!", "Error: ..."). Initial state: "Select a file or folder to get started."
+*   `output_format`: A string storing the selected output format ('mp3' or 'aac'). Initial state: 'mp3'.
 
 These states will be updated based on user actions (selecting paths, clicking Convert) and the progress/result of the background conversion process.
 

@@ -9,30 +9,37 @@ Date: May 13, 2025
 
 This tool is a standalone application with a GUI, not a traditional client-server application. Therefore, the "API" refers to the interface that the GUI layer will use to interact with the core audio extraction logic. These functions will be called directly within the same Python process.
 
-**Core Functions:**
+**Core Classes and Functions:**
 
-1.  **`process_single_file(input_filepath: str, output_format: str, output_directory: str = None) -> bool`**
-    *   **Description:** Processes a single MP4 file to extract its audio track.
-    *   **Parameters:**
-        *   `input_filepath`: Full path to the source .mp4 file.
-        *   `output_format`: Target audio format (e.g., 'mp3', 'aac'). Determines the output file extension and encoding method.
-        *   `output_directory` (Optional): Directory where the output file should be saved. If `None`, the output file is saved in the same directory as the input file.
-    *   **Returns:** `True` if processing is successful, `False` otherwise (e.g., file not found, `ffmpeg` error). Could be extended to return a status dictionary or raise exceptions for detailed error handling.
-    *   **Payload/Data:** File paths and format string.
+1. **`AudioProcessingUtils` Class**
+   * A utility class with static methods for handling audio extraction from MP4 files.
+   * This class encapsulates all the audio processing functionality, making it easy to use from both the GUI and CLI interfaces.
 
-2.  **`process_folder(input_folderpath: str, output_format: str, output_directory: str = None) -> dict`**
-    *   **Description:** Scans a folder for .mp4 files and processes each one.
-    *   **Parameters:**
-        *   `input_folderpath`: Full path to the source folder.
-        *   `output_format`: Target audio format ('mp3' or 'aac').
-        *   `output_directory` (Optional): Base directory where output files should be saved. If `None`, each output file is saved in the same directory as its corresponding input file. Note: This doesn't recreate the input folder structure if processing subfolders (which is an optional extension).
-    *   **Returns:** A dictionary containing processing statistics (e.g., `{'total_files': 5, 'successful': 4, 'failed': 1, 'errors': [...]}`).
-    *   **Payload/Data:** Folder path and format string.
+2. **`AudioProcessingUtils.check_ffmpeg() -> bool`**
+   * **Description:** Checks if FFmpeg is available in the system PATH.
+   * **Returns:** `True` if FFmpeg is available, `False` otherwise.
 
-**Helper Functions (Internal):**
+3. **`AudioProcessingUtils.process_file(input_filepath: str, output_format: str) -> Tuple[bool, str]`**
+   * **Description:** Processes a single MP4 file to extract its audio track.
+   * **Parameters:**
+     * `input_filepath`: Path to the input MP4 file.
+     * `output_format`: Output audio format ('mp3' or 'aac').
+   * **Returns:** A tuple containing (success, message) where success is True if processing was successful, and message contains status or error information.
 
-*   `_generate_output_path(input_filepath: str, output_format: str, output_directory: str = None) -> str`: Determines the full output file path based on input, format, and optional output directory.
-*   `_execute_ffmpeg(input_filepath: str, output_filepath: str, output_format: str) -> bool`: Handles the actual `ffmpeg` command execution. This is the core worker function.
+4. **`AudioProcessingUtils.process_folder(input_folderpath: str, output_format: str) -> Dict`**
+   * **Description:** Processes all MP4 files in a folder.
+   * **Parameters:**
+     * `input_folderpath`: Path to the folder containing MP4 files.
+     * `output_format`: Output audio format ('mp3' or 'aac').
+   * **Returns:** A dictionary containing processing statistics (e.g., `{'total_files': 5, 'successful': 4, 'failed': 1, 'errors': [...]}`).
+
+5. **`AudioProcessingUtils.get_output_filepath(input_filepath: str, output_format: str, output_directory: Optional[str] = None) -> str`**
+   * **Description:** Generates the output file path based on the input file path and output format.
+   * **Parameters:**
+     * `input_filepath`: Path to the input MP4 file.
+     * `output_format`: Output audio format ('mp3' or 'aac').
+     * `output_directory`: Optional directory to save the output file. If None, the output file is saved in the same directory as the input file.
+   * **Returns:** Path to the output file.
 
 ## 3. Data Models
 
@@ -45,7 +52,7 @@ The primary data structures are:
 
 ## 4. Business Logic
 
-The core business logic revolves around identifying the input files, determining the output paths, and using `ffmpeg` to extract and convert the audio streams.
+The core business logic revolves around identifying the input files, determining the output paths, and using `ffmpeg` to extract and convert the audio streams. The application uses the ffmpeg-python library to interact with FFmpeg, which provides a more reliable and maintainable interface than direct subprocess calls.
 
 **Dependencies:**
 

@@ -2,7 +2,7 @@
 
 **Document Title:** MP4 Audio Extraction Tool
 **Version:** 1.0
-**Date:** May 13, 2025
+**Date:** May 14, 2025
 
 ---
 
@@ -10,7 +10,7 @@
 
 *   **Title:** MP4 Audio Extraction Tool System Flow Documentation
 *   **Version:** 1.0
-*   **Date:** May 13, 2025
+*   **Date:** May 14, 2025
 
 ---
 
@@ -18,31 +18,36 @@
 
 The MP4 Audio Extraction Tool is a simple Python-based desktop application designed for Windows 11. Its primary function is to process one or more `.mp4` video files and extract their audio tracks, saving them as separate audio files (specifically `.mp3` or `.aac` by default).
 
-The system consists of three main logical components:
+The system follows the Model-View-Controller (MVC) architecture pattern and consists of these main components:
 
-1.  **User Interface (GUI):** Provides the user interaction point for selecting source files/folders, initiating the conversion process, and displaying status updates.
-2.  **Core Logic:** Manages the user request, identifies the files to be processed, orchestrates the conversion process (potentially handling multiple files in a queue), and interacts with the file system.
-3.  **Audio Processing Engine:** An external tool (likely wrapped by the Python application) responsible for the low-level task of demuxing the MP4 container, extracting the audio stream, and encoding it into the target format (MP3/AAC). A common choice for this is `ffmpeg`.
+1.  **View (GUI/CLI):** Provides the user interaction point for selecting source files/folders, initiating the conversion process, and displaying status updates. Implemented as both a GUI (using tkinter) and a CLI version.
+2.  **Controller:** Connects the view and model components, manages the user request, and handles the application logic.
+3.  **Model (AudioProcessingUtils):** Contains the core business logic for processing audio files. Uses the ffmpeg-python library to interact with FFmpeg.
+4.  **Audio Processing Engine:** FFmpeg is used as the external tool responsible for the low-level task of demuxing the MP4 container, extracting the audio stream, and encoding it into the target format (MP3/AAC).
 
 **Key Interactions:**
 
-*   The User interacts with the GUI.
-*   The GUI passes user selections (file/folder path) to the Core Logic.
-*   The Core Logic identifies source `.mp4` files based on the selection.
-*   The Core Logic invokes the Audio Processing Engine for each source file, providing input and output paths.
-*   The Audio Processing Engine reads the source `.mp4`, extracts/converts audio, and writes the output audio file.
-*   The Audio Processing Engine (or Core Logic monitoring it) reports status back to the Core Logic.
-*   The Core Logic updates the GUI with progress or completion status.
+*   The User interacts with the View (GUI or CLI).
+*   The View passes user selections (file/folder path) to the Controller.
+*   The Controller calls the Model (AudioProcessingUtils) to process the request.
+*   The Model identifies source `.mp4` files based on the selection.
+*   The Model uses ffmpeg-python to invoke FFmpeg for each source file, providing input and output paths.
+*   FFmpeg reads the source `.mp4`, extracts/converts audio, and writes the output audio file.
+*   The Model reports results back to the Controller.
+*   The Controller updates the View with progress or completion status.
 
 ```mermaid
 graph LR
-    A[User] --> B{GUI}
-    B --> C[Core Logic] : "Initiate Conversion"
-    C --> D[File System] : "Read Source Files"
-    D -- "MP4 Data" --> E[Audio Processing Engine<br>(e.g., ffmpeg)]
-    E -- "Process Audio" --> E
-    E --> D : "Write Output File (.mp3/.aac)"
-    E --> C : "Status Updates"
+    A[User] --> B{View<br>(GUI/CLI)}
+    B --> C[Controller] : "Initiate Conversion"
+    C --> D[Model<br>(AudioProcessingUtils)] : "Process Request"
+    D --> E[File System] : "Read Source Files"
+    E -- "MP4 Data" --> F[ffmpeg-python]
+    F -- "Execute" --> G[FFmpeg]
+    G -- "Process Audio" --> G
+    G --> E : "Write Output File (.mp3/.aac)"
+    F --> D : "Return Results"
+    D --> C : "Return Results"
     C --> B : "Update Status Display"
 ```
 

@@ -1,7 +1,7 @@
 # Project Status Report: MP4 Audio Extractor
 
 **Version: 1.0**
-**Date: Current Date**
+**Date: May 14, 2025**
 
 ---
 
@@ -44,7 +44,7 @@
 
 *   **Audio Extraction Core Logic:**
     *   Status: Completed
-    *   Notes: Implemented using FFmpeg via subprocess for both MP3 and AAC output formats.
+    *   Notes: Implemented using FFmpeg via the ffmpeg-python library for both MP3 and AAC output formats.
 
 *   **Output Format Conversion (.mp3/.aac):**
     *   Status: Completed
@@ -62,13 +62,18 @@
 
 ## 4. Testing Status
 
-**Overall Testing Status:** Not Started
+**Overall Testing Status:** Completed
 
-**Testing Areas Covered So Far:**
-*   None yet
+**Testing Areas Covered:**
+*   GUI functionality testing
+*   CLI functionality testing
+*   MP3 extraction testing
+*   AAC extraction testing
+*   Batch processing testing
+*   Error handling testing
 
 **Outstanding Issues Found During Testing:**
-*   None yet
+*   None - all tests passed successfully
 
 ---
 
@@ -91,27 +96,27 @@
 
 *   **Risk/Issue:** Windows 11 specific compatibility issues with selected Python libraries or GUI framework.
     *   **Impact:** High (Tool may not work as intended on target OS)
-    *   **Status:** Open
-    *   **Mitigation Plan:** Need to test on Windows 11 environment.
+    *   **Status:** Mitigated
+    *   **Mitigation Plan:** Tested on Windows 11 environment and confirmed working correctly.
 
 ---
 
 ## 6. Next Steps
 
-*   **Action Item:** Test the application with various MP4 files
+*   **Action Item:** Add support for custom output directory selection
     *   **Owner:** Developer
     *   **Due Date:** TBD
-    *   **Notes:** Test with different MP4 files to ensure compatibility and proper extraction.
+    *   **Notes:** Implement a feature to allow users to select a custom output directory.
 
-*   **Action Item:** Create user documentation
+*   **Action Item:** Add support for additional output formats
     *   **Owner:** Developer
     *   **Due Date:** TBD
-    *   **Notes:** Create a simple user guide explaining how to use the application.
+    *   **Notes:** Consider adding support for additional output formats like FLAC or OGG.
 
-*   **Action Item:** Consider adding additional features like output directory selection
+*   **Action Item:** Improve error handling and reporting
     *   **Owner:** Developer
     *   **Due Date:** TBD
-    *   **Notes:** Evaluate the need for additional features based on testing feedback.
+    *   **Notes:** Enhance error handling and provide more detailed error messages to users.
 
 ---
 

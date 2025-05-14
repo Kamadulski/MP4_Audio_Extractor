@@ -94,8 +94,9 @@ This section outlines the non-functional aspects required for the tool.
 *   **Operating System:** Windows 11.
 *   **Software Environment:** A functional Python installation (version 3.6 or later recommended).
 *   **Required Libraries:**
-    *   A Python library for creating GUIs (e.g., Tkinter - standard, PyQt, or Kivy).
-    *   An external library or Python wrapper capable of reading MP4 container formats, extracting audio streams, and encoding/converting audio to MP3 or AAC format (e.g., `ffmpeg` executable accessible via `subprocess`, or a Python wrapper like `moviepy`, `pydub` potentially combined with backend tools).
+    *   A Python library for creating GUIs (e.g., Tkinter - standard, which is used in the current implementation).
+    *   The `ffmpeg-python` library, which is a Python wrapper for FFmpeg that provides a more reliable and maintainable interface than direct subprocess calls.
+    *   The `ffmpeg` executable, which must be installed separately and accessible from the system's PATH.
 
 **Constraints:**
 *   **Tech Stack:** Development must primarily utilize Python.
