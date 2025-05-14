@@ -17,12 +17,8 @@ def main_cli():
     # Use the CLI view
     from mp4_audio_extractor.view_cli import AudioExtractorCLI
 
-    view = AudioExtractorCLI()
-    view.set_controller_callbacks(
-        controller.process_file,
-        controller.process_folder,
-        controller.check_ffmpeg
-    )
+    # Create the view with the controller
+    view = AudioExtractorCLI(controller)
 
     # Run the CLI application
     return view.run()
@@ -43,11 +39,8 @@ def main():
         try:
             from mp4_audio_extractor.view_gui import AudioExtractorGUI
 
-            view = AudioExtractorGUI()
-            view.set_controller_callbacks(
-                controller.handle_gui_convert,
-                controller.check_ffmpeg
-            )
+            # Create the view with the controller
+            view = AudioExtractorGUI(controller)
 
             # Run the GUI application
             view.run()
