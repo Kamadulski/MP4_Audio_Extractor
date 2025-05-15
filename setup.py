@@ -12,11 +12,11 @@ setup(
     name="mp4_audio_extractor",
     version="1.0.0",
     author="MP4 Audio Extractor Team",
-    author_email="example@example.com",
+    author_email="rogier.wachters@gmail.com",
     description="A simple application to extract audio tracks from MP4 video files",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/mp4_audio_extractor",
+    url="https://github.com/rwachters/MP4_Audio_Extractor",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
