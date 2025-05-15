@@ -11,7 +11,7 @@ A simple application to extract audio tracks from MP4 video files. Available in 
 
 ## Requirements
 
-- Python 3.6 or higher
+- Python 3.6 or higher (with tkinter for the GUI version)
 - FFmpeg installed and available in the system PATH
 
 ## Installation
@@ -34,6 +34,10 @@ The application is built using the Model-View-Controller (MVC) architecture:
 ### GUI Version
 
 **Note:** The GUI version requires tkinter, which is included with most Python installations but may need to be installed separately on some systems.
+
+Here is a screenshot of the main window:
+
+![MP4 Audio Extractor GUI](assets/gui_screenshot.png)
 
 1. Run the GUI application:
    ```
