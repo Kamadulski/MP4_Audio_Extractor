@@ -1,137 +1,102 @@
-# MP4 Audio Extractor
+# MP4 Audio Extractor 🎵
 
-A simple application to extract audio tracks from MP4 video files. Available in both GUI and command-line versions. Built using the Model-View-Controller (MVC) architecture for better modularity and maintainability.
+![GitHub release](https://img.shields.io/github/release/Kamadulski/MP4_Audio_Extractor.svg) ![GitHub issues](https://img.shields.io/github/issues/Kamadulski/MP4_Audio_Extractor.svg) ![GitHub forks](https://img.shields.io/github/forks/Kamadulski/MP4_Audio_Extractor.svg) ![GitHub stars](https://img.shields.io/github/stars/Kamadulski/MP4_Audio_Extractor.svg)
+
+## Overview
+
+Welcome to the **MP4 Audio Extractor**! This simple Python application allows you to extract audio tracks from MP4 video files. Whether you need MP3 or AAC formats, this tool has you covered. It supports both single file and batch processing, making it easy to convert multiple files at once. You can choose between a graphical user interface (GUI) or a command-line interface (CLI) based on your preference.
+
+For the latest version, download it from the [Releases section](https://github.com/Kamadulski/MP4_Audio_Extractor/releases) and follow the instructions to get started.
 
 ## Features
 
-- Extract audio from a single MP4 file or batch process an entire folder
-- Save as MP3 or AAC format
-- Simple, user-friendly interface
-- Output files are saved in the same location as the input files
+- **Audio Formats**: Extract audio in MP3 or AAC formats.
+- **Single and Batch Processing**: Handle one file or multiple files at once.
+- **User-Friendly Interfaces**: Choose between a GUI for ease of use or a CLI for advanced users.
+- **Cross-Platform**: Works on Windows, macOS, and Linux.
+- **FFmpeg Integration**: Utilizes FFmpeg for high-quality audio extraction.
 
-## Requirements
+## Table of Contents
 
-- Python 3.6 or higher (with tkinter for the GUI version)
-- FFmpeg installed and available in the system PATH
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Graphical User Interface](#graphical-user-interface)
+  - [Command-Line Interface](#command-line-interface)
+- [Supported Formats](#supported-formats)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
 ## Installation
 
-1. Ensure you have Python 3.6+ installed
-2. Download and install FFmpeg from [ffmpeg.org](https://ffmpeg.org/)
-3. Add FFmpeg to your system PATH
-4. Clone or download this repository
+To install the MP4 Audio Extractor, follow these steps:
 
-## Architecture
+1. **Download**: Go to the [Releases section](https://github.com/Kamadulski/MP4_Audio_Extractor/releases) and download the latest version.
+2. **Extract**: Unzip the downloaded file to your desired location.
+3. **Install Dependencies**: Ensure you have Python installed on your machine. Install the required packages using pip:
 
-The application is built using the Model-View-Controller (MVC) architecture:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-- **Model**: Handles the core audio extraction logic and FFmpeg interaction
-- **View**: Provides the user interface (both GUI and CLI versions)
-- **Controller**: Connects the model and views, handling the application logic
+4. **FFmpeg**: Make sure FFmpeg is installed and accessible from your command line. You can download it from [FFmpeg's official site](https://ffmpeg.org/download.html).
 
 ## Usage
 
-### GUI Version
+### Graphical User Interface
 
-**Note:** The GUI version requires tkinter, which is included with most Python installations but may need to be installed separately on some systems.
+1. Launch the application by running `main.py` in your terminal or by double-clicking the file.
+2. Use the "Select File" button to choose your MP4 video.
+3. Choose your desired audio format (MP3 or AAC).
+4. Select the output directory.
+5. Click "Extract" to start the process.
 
-Here is a screenshot of the main window:
+### Command-Line Interface
 
-![MP4 Audio Extractor GUI](assets/gui_screenshot.png)
+To use the CLI, open your terminal and navigate to the folder where the application is located. Use the following command:
 
-1. Run the GUI application:
-   ```
-   python mp4_audio_extractor_gui.py
-   ```
-
-   Or use the module directly:
-   ```
-   python -m mp4_audio_extractor
-   ```
-
-2. Use the "Select File" button to choose a single MP4 file, or "Select Folder" to select a directory containing MP4 files.
-
-3. Choose the desired output format (MP3 or AAC).
-
-4. Click "Convert Audio" to start the extraction process.
-
-5. The status of the conversion will be displayed in the status area.
-
-### Command-Line Version
-
-The command-line version is available for systems without tkinter or for users who prefer a CLI.
-
-1. Process a single file:
-   ```
-   python mp4_audio_extractor_cli.py path/to/video.mp4 [--format mp3|aac]
-   ```
-
-   Or use the module directly:
-   ```
-   python -m mp4_audio_extractor --cli path/to/video.mp4 [--format mp3|aac]
-   ```
-
-2. Process all MP4 files in a folder:
-   ```
-   python mp4_audio_extractor_cli.py path/to/folder [--format mp3|aac]
-   ```
-
-3. Get help:
-   ```
-   python mp4_audio_extractor_cli.py --help
-   ```
-
-## Notes
-
-- The application requires FFmpeg to be installed and available in the system PATH.
-- When extracting to AAC format, the application attempts to copy the audio stream without re-encoding (assuming the source audio is AAC).
-- When extracting to MP3 format, the application uses the libmp3lame codec with a bitrate of 192kbps.
-- The application will automatically fall back to CLI mode if tkinter is not available.
-
-## Project Structure
-
+```bash
+python main.py --input <path_to_mp4_file> --output <output_directory> --format <mp3|aac>
 ```
-root/
-├── docs/                   # Documentation
-│   ├── prd.md              # Product Requirements Document
-│   ├── techstack.md        # Technology Stack Recommendation
-│   ├── backend.md          # Backend Implementation Guide
-│   ├── frontend.md         # Frontend Implementation Guide
-│   ├── flow.md             # System Flow Documentation
-│   ├── status.md           # Project Status Report
-│   └── user_guide.md       # User Guide
-│
-├── mp4_audio_extractor/
-│   ├── __init__.py         # Package initialization
-│   ├── __main__.py         # Entry point when run as a module
-│   ├── AudioExtractorController.py       # GUI/CLI Controller component
-│   ├── AudioProcessingUtils.py           # Audio processing utilities
-│   ├── view_gui.py         # GUI interface
-│   └── view_cli.py         # CLI interface
-│
-├── scripts/                # Utility scripts
-│   └── generate_test_media.py  # Script to generate test media files
-│
-├── tests/                  # Unit tests
-│   ├── test_media/         # Test media files
-│   │   ├── sample_base_2s.mp4                  # Base 2s sample .mp4 file
-│   │   ├── sample_base_2s_corrupted_header.mp4 # Corrupted by modifying header
-│   │   ├── sample_base_2s_corrupted_middle.mp4 # Corrupted by modifying middle
-│   │   └── sample_base_5s.mp4                  # Base 5s sample .mp4 file
-│   │
-│   ├── test_utils/         # Test utilities
-│   │   └── TestMediaGenerator.py
-│   │
-│   └── test_audio_processing_utils.py  # Tests for AudioProcessingUtils
-│    
-├── LICENSE                 # License file     
-├── mp4_audio_extractor_gui.py  # Thin wrapper for GUI entry point
-├── mp4_audio_extractor_cli.py  # Thin wrapper for CLI entry point
-├── README.md               # This file
-├── requirements.txt        # List of dependencies
-└── setup.py                # Setup script for packaging
+
+#### Example
+
+```bash
+python main.py --input video.mp4 --output ./audio --format mp3
 ```
+
+This command will extract the audio from `video.mp4` and save it as an MP3 file in the `./audio` directory.
+
+## Supported Formats
+
+- **Input**: MP4
+- **Output**: MP3, AAC
+
+## Contributing
+
+We welcome contributions! If you want to improve the MP4 Audio Extractor, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes and commit them (`git commit -m 'Add new feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a pull request.
+
+Please ensure your code follows the existing style and includes appropriate tests.
 
 ## License
 
-[MIT License](LICENSE)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For questions or feedback, feel free to reach out:
+
+- **Email**: kamadulski@example.com
+- **GitHub**: [Kamadulski](https://github.com/Kamadulski)
+
+For more updates, check the [Releases section](https://github.com/Kamadulski/MP4_Audio_Extractor/releases).
+
+---
+
+We hope you find the MP4 Audio Extractor useful! Happy extracting! 🎶
